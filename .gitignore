@@ -1,0 +1,7 @@
+*/.ipynb_checkpoints/*
+*/__pycache__/*
+/.ipynb_checkpoints
+/hyperparameter_tuning/results/peptide_only/
+/hyperparameter_tuning/errout/
+/Data/MHC-Bench.csv
+/Data/MHC-Bench_v2.csv

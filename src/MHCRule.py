@@ -638,18 +638,20 @@ def fit_loop(model, allele_ls, df, test_size, retrain=False):
         
     return pd.concat(results_ls), model
 
-def eval_loop(model, allele_ls, df):
+def eval_loop(model, allele_ls, df, return_predictions=False):
     '''
     Function to train model while looping through alleles list
     Args:
         model (MHCRule model): MHCRulePepOnly or MHCRuleHydro or MHCRuleHydroPep model to be evaluated
         allele_ls (list): list of alleles for which evaluation is to be done
         df (pd.DataFrame): evaluation data
+        return_predictions (Bool): whether predictions should be returned or not
         
     Returns:
         pd.DataFrame: result of evaluation and metrics
     '''
     results_ls = []
+    predictions_ls = []
     
     for allele in tqdm(allele_ls):
         
@@ -665,9 +667,12 @@ def eval_loop(model, allele_ls, df):
         start_time = time.time()
         
         
-        ### Train results
+        ### results
         prediction = model.predict(allele, X_, return_rules=False)
         prediction_proba = model.predict_proba(allele, X_, return_rules=False)
+        
+        hla_df['y_predicted'] = prediction
+        hla_df['y_proba'] = prediction_proba
 
         acc_, f1_, auroc, auprc = get_metric_results(y_, prediction, 
                                                      prediction_proba, 
@@ -683,5 +688,9 @@ def eval_loop(model, allele_ls, df):
             result['rule_count'] = [len(model.models[allele].model.rules)]
         
         results_ls = results_ls + [pd.DataFrame(result)]
+        predictions_ls = predictions_ls + [hla_df]
         
-    return pd.concat(results_ls)
+    if return_predictions:
+        return pd.concat(results_ls), pd.concat(predictions_ls)
+    else:
+        return pd.concat(results_ls)

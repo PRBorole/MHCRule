@@ -423,7 +423,6 @@ class MHCRuleHydroPep:
             y (array-like): Target vector.
             retrain (bool): If True, retrain the model even if it already exists.
         """
-        X_encoded = get_sequence_encoding(X, self.scale)
         
         # Check if model for this allele already exists and retraining is not requested
         if allele in self.alleles and not retrain:
@@ -434,7 +433,7 @@ class MHCRuleHydroPep:
                 
             # Get predictions from individual models
             y_peponly_ls = self.mhcrulepeponly.predict_proba(allele, X)
-            y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X_encoded)
+            y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X)
 
             # Create a DataFrame with true labels and predictions
             train_df = pd.DataFrame({'y_true': y,
@@ -459,11 +458,10 @@ class MHCRuleHydroPep:
             array-like: Predicted target.
             Optional: Rule coverage matrices or rule strings if return_rules is True.
         """
-        X_encoded = get_sequence_encoding(X, self.scale)
         
         # Get predictions from individual models
         y_peponly_ls = self.mhcrulepeponly.predict_proba(allele, X)
-        y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X_encoded)
+        y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X)
         
         # Create a DataFrame with predictions
         test_df = pd.DataFrame({'y_peponly': y_peponly_ls,
@@ -473,6 +471,7 @@ class MHCRuleHydroPep:
         
         if return_rules and str_rules:
             coverage_matrix_peponly = get_ruleset_coverage_matrix(self.mhcrulepeponly.models[allele].model, X)
+            X_encoded = get_sequence_encoding(X, self.scale)
             coverage_matrix_hydro = get_ruleset_coverage_matrix_scale(self.mhcrulehydro.models[allele].model, X_encoded)
             
             rules_peponly_ls = [[str(self.mhcrulepeponly.models[allele].model.rules[jdx]) for jdx, j in enumerate(i) if j == 1] for i in coverage_matrix_peponly]
@@ -501,11 +500,10 @@ class MHCRuleHydroPep:
             array-like: Predicted target probabilities.
             Optional: Rule coverage matrices or rule strings if return_rules is True.
         """
-        X_encoded = get_sequence_encoding(X, self.scale)
         
         # Get predictions from individual models
         y_peponly_ls = self.mhcrulepeponly.predict_proba(allele, X)
-        y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X_encoded)
+        y_hydro_ls = self.mhcrulehydro.predict_proba(allele, X)
         
         # Create a DataFrame with predictions
         test_df = pd.DataFrame({'y_peponly': y_peponly_ls,
@@ -516,6 +514,7 @@ class MHCRuleHydroPep:
         
         if return_rules and str_rules:
             coverage_matrix_peponly = get_ruleset_coverage_matrix(self.mhcrulepeponly.models[allele].model, X)
+            X_encoded = get_sequence_encoding(X, self.scale)
             coverage_matrix_hydro = get_ruleset_coverage_matrix_scale(self.mhcrulehydro.models[allele].model, X_encoded)
             
             rules_peponly_ls = [[str(self.mhcrulepeponly.models[allele].model.rules[jdx]) for jdx, j in enumerate(i) if j == 1] for i in coverage_matrix_peponly]
@@ -638,3 +637,51 @@ def fit_loop(model, allele_ls, df, test_size, retrain=False):
         results_ls = results_ls + [pd.DataFrame(result)]
         
     return pd.concat(results_ls), model
+
+def eval_loop(model, allele_ls, df):
+    '''
+    Function to train model while looping through alleles list
+    Args:
+        model (MHCRule model): MHCRulePepOnly or MHCRuleHydro or MHCRuleHydroPep model to be evaluated
+        allele_ls (list): list of alleles for which evaluation is to be done
+        df (pd.DataFrame): evaluation data
+        
+    Returns:
+        pd.DataFrame: result of evaluation and metrics
+    '''
+    results_ls = []
+    
+    for allele in tqdm(allele_ls):
+        
+        result = {'allele':[allele]}
+        
+        hla_df = df[df['allele']==allele].reset_index(drop=True)
+        result['peptide_count'] = [len(hla_df)]
+
+        # get X and y
+        X_, y_ = get_vector_representation(hla_df['peptide']), hla_df['y'].to_numpy()
+
+        # Start the timer
+        start_time = time.time()
+        
+        
+        ### Train results
+        prediction = model.predict(allele, X_, return_rules=False)
+        prediction_proba = model.predict_proba(allele, X_, return_rules=False)
+
+        acc_, f1_, auroc, auprc = get_metric_results(y_, prediction, 
+                                                     prediction_proba, 
+                                                     metrics=['accuracy','f1','AUROC','AUPRC'])
+        
+        
+        result['accuracy'], result['f1'] = acc_, f1_
+        result['auroc'], result['auprc'] = auroc, auprc
+             
+        if isinstance(model, MHCRuleHydroPep):
+            result['rule_count'] = [len(model.mhcrulepeponly.models[allele].model.rules) + len(model.mhcrulehydro.models[allele].model.rules)]
+        else:
+            result['rule_count'] = [len(model.models[allele].model.rules)]
+        
+        results_ls = results_ls + [pd.DataFrame(result)]
+        
+    return pd.concat(results_ls)

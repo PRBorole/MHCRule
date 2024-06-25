@@ -98,7 +98,7 @@ def get_rule_cover(rule_string, input_value):
     
     # Replace variable names with their corresponding values
     for idx, value in enumerate(input_value):
-        rule_string = rule_string.replace('att'+str(idx+1), "'"+str(value)+"'")
+        rule_string = rule_string.replace('att'+str(idx+1)+' ', "'"+str(value)+"' ")
         
     # Replace logical operators and range notation with Python equivalents
     rule_string = rule_string.replace("AND", "and")

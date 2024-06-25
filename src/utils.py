@@ -5,12 +5,16 @@ import random
 from tqdm import tqdm
 import time
 from Bio import SeqIO
+from Bio import motifs
+from Bio.Seq import Seq
+import logomaker
 import pickle
 import itertools
 
 from sklearn.metrics import accuracy_score, f1_score, precision_recall_curve, roc_curve, auc
 from sklearn.metrics import make_scorer, roc_auc_score
 from sklearn.model_selection import train_test_split
+
 import aaanalysis as aa
 aa.options["verbose"] = False
 aa.options["random_state"] = 42
@@ -78,7 +82,7 @@ def get_sequence_encoding(sequence_ls, scale=None):
     '''
     # if sequences are not vectorized yet,
     if type(sequence_ls)!=np.ndarray:
-        sequence_ls = self.get_vector_representation(sequence_ls)
+        sequence_ls = get_vector_representation(sequence_ls)
 
     # get scale 
     df_scales = aa.load_scales()
@@ -122,4 +126,23 @@ def get_metric_results(y_true=None, y_predicted=None, y_predicted_proba=None, me
         
     return metrics_results
 
+
+def get_allele_pwm(sequences):
+    '''
+    Creates PWM for a set of peptides associated with an allele
+    Args:
+        sequences (list): sequence list of peptide
+    Returns:
+        pwm (np.array): calculated position weight matrix
+    '''
+    #  Define your protein sequences
+    sequences = [Seq(peptide) for peptide in sequences]
+
+    # Create a motif object from the sequences
+    m = motifs.create(sequences, alphabet='ACDEFGHIKLMNPQRSTVWY')
+
+    # Convert PFM to Position-Specific Scoring Matrix (PSSM)
+    pwm = m.pwm
+
+    return pwm
 

@@ -1,0 +1,2 @@
+,peptide_count,train_time,train_accuracy,train_f1,train_auroc,train_auprc,valid_accuracy,valid_f1,valid_auroc,valid_auprc,test_accuracy,test_f1,test_auroc,test_auprc,rule_count
+0,15680,21485.298558,0.716773,0.498644,0.727955,0.543706,0.706942,0.483963,0.714797,0.530572,0.70797,0.480742,0.714935,0.525503,1674

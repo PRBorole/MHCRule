@@ -7,11 +7,11 @@
 </div>
 
  <p align="center">
-  <a href="Introduction">Introduction</a> •
-  <a href="Requirements">Requirements</a> •
-  <a href="Usage">Usage</a> •
-  <a href="Directory Structure">Directory Structure</a> •
-  <a href="license">License</a> •
+  <a href="#Introduction">Introduction</a> •
+  <a href="#Requirements">Requirements</a> •
+  <a href="#Usage">Usage</a> •
+  <a href="#Directory Structure">Directory Structure</a> •
+  <a href="#license">License</a> •
 </p>
 
 ---

@@ -42,7 +42,7 @@ See <a href="./USAGE EXAMPLE.ipynb"> USAGE EXAMPLE.ipynb</a>
 ---
 ## Directory Structure
 
-| Syntax | Description |
+| File/Folder | Description |
 | ----------- | ----------- |
 | Data | Folder containing data needed for project |
 | figures | Folder containing result figures for paper |

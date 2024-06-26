@@ -1,0 +1,1 @@
+Trained MHCRule variant models 

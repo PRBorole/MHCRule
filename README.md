@@ -108,8 +108,13 @@ tree -L 2
 ├── README.md
 ├── requirements.txt
 ├── results
-│   ├── MHCRule
+│   ├── MHCRule
+│   │   ├── mhcbench_v2_results
+│   │   └── training_results
 │   └── PWM
+│       ├── PWM_mhcmotifatlas
+│       ├── PWM_predicted_data
+│       └── PWM_training_data
 ├── src
 │   ├── __init__.py
 │   ├── MHCRule.py

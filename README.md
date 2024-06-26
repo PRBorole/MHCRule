@@ -29,9 +29,11 @@ MHCRuleHydroPep is a model consisting of two submodules - MHCRulePepOnly and MHC
 ---
 ## Requirements
 
-Python version: 3.9
+For this project, we used <a href="[./requirements.txt](https://github.com/adaa-polsl/RuleKit-python)">  RuleKit-Python</a> package for generating contrast set rules. 
 
-See <a href="./requirements.txt"> requirements.txt</a>
+For running the code, we use Python version - 3.9
+
+See <a href="./requirements.txt"> requirements.txt</a> for the list of python packages.
 
 ---
 ## Usage

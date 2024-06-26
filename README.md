@@ -55,7 +55,7 @@ See <a href="./USAGE EXAMPLE.ipynb"> USAGE EXAMPLE.ipynb</a>
 
 
 ```bash
-tree -L 2
+tree -L 3
 
 .
 ├── Data

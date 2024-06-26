@@ -15,7 +15,6 @@
 </p>
 
 ---
-
 ## Introduction
 
 Existing predictors for MHC-I binding are predominantly deep learning-based  that are highly accurate but lack interpretability. MHCRule offers both MHC-I binding prediction and interpretable rules, enhancing trust in these predictions.
@@ -30,11 +29,14 @@ MHCRuleHydroPep is a model consisting of two submodules - MHCRulePepOnly and MHC
 ---
 ## Requirements
 
+Python version: 3.9
+
+See <a href="./requirements.txt"> requirements.txt</a>
+
 ---
 ## Usage
 See <a href="./USAGE EXAMPLE.ipynb"> USAGE EXAMPLE.ipynb</a>
 
 ---
-
 ## Directory Structure
 

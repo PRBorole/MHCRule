@@ -16,5 +16,5 @@ This folder contains all the datasets needed for the project.
 Following two datasets are downloaded from:
 | File/Folder | Description | Source |
 | ----------- | ----------- | ----------- |
-| Data_HLA.csv | Original training data from MHCflurry |  |
-| MHCbe | Independent evaluation dataset from MHCXAI |  |
+| Data_S3.csv | Original training data from MHCflurry |  |
+| MHC-Bench_v2.csv | Independent evaluation dataset from MHCXAI |  |

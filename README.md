@@ -123,4 +123,14 @@ tree -L 3
 └── USAGE EXAMPLE.ipynb
 ```
 
+Citation:
+```bibtex
+
+@article{borole2025mhcrule,
+  title={MHCRule: Rule-based Model for Interpretable MHC Class I Binding Prediction},
+  author={Borole, Piyush and Rajan, Ajitha},
+  booktitle={Proceedings of the 40th ACM/SIGAPP Symposium on Applied Computing},
+  year={2025}
+}
+```
 
